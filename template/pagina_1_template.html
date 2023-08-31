@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      /* Establecer el tamaño de página a A4 y los márgenes */
+      @page {
+        size: A4;
+        margin: 2.5cm;
+      }
+
+      /* Estilos generales para el cuerpo del documento */
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      /* Estilos para el encabezado con información */
+      .header {
+        display: flex;
+        justify-content: space-between;
+        border: 1px solid black;
+        padding: 10px;
+        margin-bottom: 20px;
+      }
+
+      /* Estilos para la columna izquierda del encabezado */
+      .left-column {
+        width: 48%;
+      }
+
+      /* Estilos para la columna derecha del encabezado */
+      .right-column {
+        width: 48%;
+        text-align: left;
+      }
+
+      /* Estilos para una caja con seis columnas */
+
+      .cuadro-mediciones {
+        /* border: 1px solid black; */
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        border: 1px solid black;
+        align-items: column;
+      }
+
+      .cuadro-mediciones .column {
+        width: 100%;
+        flex: 1;
+        text-align: center;
+      }
+
+      .cuadro-mediciones .row {
+        display: flex;
+        flex-direction: row;
+        text-align: center;
+      }
+
+      .table-head {
+        width: auto;
+        border: 1px solid black;
+        background-color: rgba(65, 181, 226, 0.588);
+        padding: 2px;
+      }
+
+      /* Estilos para la última columna dentro de la caja de seis columnas */
+
+      .calibracion-de-laboratorio {
+        border: 1px solid black;
+        width: 100%;
+        display: flex;
+      }
+
+      .calibracion-de-laboratorio .column {
+        flex: 1;
+        border-right: 1px solid black;
+        padding: 10px;
+        text-align: center;
+      }
+
+      .recuadro-observaciones {
+        border: 1px solid black;
+        width: 100%;
+        display: flex;
+      }
+
+      .recuadro-observaciones .column {
+        flex: 1;
+        border-right: 1px solid black;
+        padding: 10px;
+        text-align: center;
+      }
+
+      /* Estilos para cada columna dentro de la caja de seis columnas */
+
+      /* Estilos para el texto entre las cajas de contenido */
+      .text-between-boxes {
+        text-align: center;
+        margin: 20px 0;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Encabezado con información -->
+    <div class="header">
+      <!-- Columna izquierda del encabezado -->
+      <div class="left-column">
+        <div>Fecha: {{ fecha }}</div>
+        <div>Empresa Evaluada: {{ empresa }}</div>
+        <div>Área:</div>
+      </div>
+      <!-- Columna derecha del encabezado -->
+      <div class="right-column">
+        <div>Empleado: {{ empleado }}</div>
+        <div>Empresa Evaluadora:</div>
+        <div>Realizado Por:</div>
+      </div>
+    </div>
+
+    <!-- Título entre las cajas de contenido -->
+    <div class="text-between-boxes">Estas son las mediciones</div>
+
+    <!-- Caja de contenido con seis columnas -->
+    <div class="cuadro-mediciones">
+      <div class="row table-head">
+        <div class="column">Nombre</div>
+        <div class="column">Leq [dB]</div>
+        <div class="column">LAFMáx [dB]</div>
+        <div class="column">LMáx [dB]</div>
+        <div class="column">LMín [dB]</div>
+      </div>
+      {% for muestra in data %}
+      <div class="row">
+        <div class="column">{{ muestra[0]["Nombre"] }}</div>
+        <div class="column">{{ muestra[1]["Leq [dB]"] }}</div>
+        <div class="column">{{ muestra[1]["LAFMáx [dB]"] }}</div>
+        <div class="column">{{ muestra[1]["LMáx [dB]"] }}</div>
+        <div class="column">{{ muestra[1]["LMín [dB]"] }}</div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Título entre las cajas de contenido -->
+    <div class="text-between-boxes">Calibracion de Laboratorio</div>
+
+    <!-- Caja de contenido con dos columnas -->
+    <div class="calibracion-de-laboratorio">
+      <div class="column">Seonómetro</div>
+      <div class="column">Calibrador de sonido</div>
+    </div>
+
+    <!-- Título entre las cajas de contenido -->
+    <div class="text-between-boxes">Observaciones</div>
+
+    <!-- Caja de contenido con una columna vacía -->
+    <div class="recuadro-observaciones">
+      <div class="column">&nbsp;</div>
+    </div>
+  </body>
+</html>
