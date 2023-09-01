@@ -64,17 +64,17 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
 
         # Obtener valores para el eje x
         x1 = np.arange(0.0, cantidad_muestras, intervalo) # Crea tambien intervalos de tiempo
-        # x2 = [63, 80, 100, 125]
+        x2 = ["63", "80", "100", "125", "160", "200", "250", "315", "400", "500", "630", "800", "1 k", "1,25 k", "1,6 k", "2 k", "2,5 k", "3,15 k", "4 k", "5 k", "6,3 k", "8 k", "10 k", "12,5 k", "16 k", "20 k"]
         
         # Obtener valores para eje y
         y1 = muestra[2]
-        # y2 = muestra[3]
+        y2 = muestra[3]
 
         # Crear los 2 gráficos, y define el tamaño de la figura
-        fig, (ax1, ax2)  = plt.subplots(2, figsize=(10,4))
+        fig, (ax1, ax2)  = plt.subplots(2, figsize=(10,8))
 
         # Ajusta los margenes izquierdo y derecho
-        plt.subplots_adjust(left=0.05, right=0.99)
+        plt.subplots_adjust(left=0.05, right=0.99, hspace=0.6)
 
         # Crea el ploy con los valores x, y entregados
         ax1.plot(x1, y1)
@@ -82,10 +82,12 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
 
         ax1.set(xlabel='Tiempo (min)', ylabel='Ruido [dB]',
             title='Ruido vs Tiempo')
-        ax1.grid()
+        ax1.grid() # establece un grid de fondo para el primer grafico
         ax2.set(xlabel='Frecuencia [Hz]', ylabel='Ruido [dB]',
-            title='Leq vs 1/3 de Octava') # FALTA HACER QUE DIGA DINAMICAMENTE PARA CUANDO ES 1 OCTAVA O 1/3 DE OCTAVA
-        ax2.grid()
+            title='Leq vs 1/3 de Octava')
+        
+        ax2.grid(zorder=1) # zorder define un orden de aparicion menor que las barras
+        ax2.bar(x2, y2, zorder=2) #zorder define un orden de aparicion mayor que la grid
 
         # Renderizar el template con los datos
         img_path = os.path.join(template_directory, 'grafico1.png')
