@@ -27,13 +27,7 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
 
     # Cargar el template HTML
     template = env.get_template('pagina_1_template.html')
-    # Renderizar el template con los datos
-    img_path = os.path.join(template_directory, 'grafico1.png')
-
-    # Convertir la imagen en base64 para que pdfkit pueda leerla y transformarla en pdf
-    with open(img_path, 'rb') as img_file:
-        img_base64 = base64.b64encode(img_file.read()).decode('utf-8')
-
+    
     html_content = template.render(
         data=data,
         empresa=empresa,
@@ -42,7 +36,6 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
         empleado=empleado, 
         fecha=fecha,
         numSerie_fechaCalib=numSerie_fechaCalib,
-        img_base64=img_base64   
         )
     # Configuracion del path para wkhtmltopdf
     path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
@@ -94,23 +87,26 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
             title='Leq vs 1/3 de Octava') # FALTA HACER QUE DIGA DINAMICAMENTE PARA CUANDO ES 1 OCTAVA O 1/3 DE OCTAVA
         ax2.grid()
 
+        # Renderizar el template con los datos
         img_path = os.path.join(template_directory, 'grafico1.png')
-        
         plt.savefig(img_path)
+
+        # Convertir la imagen en base64 para que pdfkit pueda leerla y transformarla en pdf
+        with open(img_path, 'rb') as img_file:
+            img_base64 = base64.b64encode(img_file.read()).decode('utf-8')
+
 
         temp_html_content = template.render(
             data=muestra, 
             numSerie_fechaCalib=numSerie_fechaCalib, 
-            img_path = img_path)
+            img_base64 = img_base64)
 
         temp_pdf_path = f"temp_informe_muestra_{i+1}.pdf"
-        print("A")
+
         pdfkit.from_string(temp_html_content, temp_pdf_path, configuration=config)
-        print("B")
         pdf_reader = PyPDF2.PdfReader(temp_pdf_path)
-        print("C")
         pdf_writer.add_page(pdf_reader.pages[0])
-        print("D")
+        
 
         os.remove(temp_pdf_path)
         os.remove(img_path)
@@ -119,4 +115,4 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
     with open(pdf_path, "wb") as final_pdf_file:
         pdf_writer.write(final_pdf_file)
 
-    webbrowser.open(pdf_path)
+    # webbrowser.open(pdf_path)

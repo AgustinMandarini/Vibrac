@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="utf-8">
     <style>
       /* Establecer el tamaño de página a A4 y los márgenes */
       @page {
@@ -108,7 +109,7 @@
       </div>
     </div>
     <div class="grafico1">
-      <img src="file://{{ img_path }}" alt="" />
+      <img src="data:image/png;base64,{{ img_base64 }}">
     </div>
   </body>
 </html>
