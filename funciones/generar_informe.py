@@ -1,12 +1,13 @@
 import os
 import PyPDF2
 from jinja2 import Environment, FileSystemLoader
-from weasyprint import HTML
+import pdfkit
 from funciones.structure_data import structure_data
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
 import webbrowser
+import base64
 
 def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha):
     # importa la funcion structure_data y retorna los dos grupos de datos
@@ -27,6 +28,11 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
     # Cargar el template HTML
     template = env.get_template('pagina_1_template.html')
     # Renderizar el template con los datos
+    img_path = os.path.join(template_directory, 'grafico1.png')
+
+    # Convertir la imagen en base64 para que pdfkit pueda leerla y transformarla en pdf
+    with open(img_path, 'rb') as img_file:
+        img_base64 = base64.b64encode(img_file.read()).decode('utf-8')
 
     html_content = template.render(
         data=data,
@@ -35,13 +41,15 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
         titulo=titulo, 
         empleado=empleado, 
         fecha=fecha,
-        numSerie_fechaCalib=numSerie_fechaCalib    
+        numSerie_fechaCalib=numSerie_fechaCalib,
+        img_base64=img_base64   
         )
+    # Configuracion del path para wkhtmltopdf
+    path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
-    # Crear un archivo PDF a partir del contenido HTML
-    html = HTML(string=html_content)
     pdf_path = f'informe_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.pdf'
-    html.write_pdf(pdf_path)
+    pdfkit.from_string(html_content, pdf_path, configuration=config)
 
     ##### CREAR RESTO DEL INFORME #####
 
@@ -95,12 +103,14 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
             numSerie_fechaCalib=numSerie_fechaCalib, 
             img_path = img_path)
 
-        temp_html = HTML(string=temp_html_content)
         temp_pdf_path = f"temp_informe_muestra_{i+1}.pdf"
-        temp_html.write_pdf(temp_pdf_path)
-
+        print("A")
+        pdfkit.from_string(temp_html_content, temp_pdf_path, configuration=config)
+        print("B")
         pdf_reader = PyPDF2.PdfReader(temp_pdf_path)
+        print("C")
         pdf_writer.add_page(pdf_reader.pages[0])
+        print("D")
 
         os.remove(temp_pdf_path)
         os.remove(img_path)

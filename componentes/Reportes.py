@@ -135,6 +135,7 @@ class Reportes(tk.Toplevel):
                         empleado, 
                         fecha)
                 except Exception as e:
+                    print(e)
                     self.mostrar_popup(e)
 
     # Busca las empresas anteriormente utilizadas
