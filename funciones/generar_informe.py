@@ -86,6 +86,9 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
         ax2.set(xlabel='Frecuencia [Hz]', ylabel='Ruido [dB]',
             title='Leq vs 1/3 de Octava')
         
+        # Rotar las etiquetas del eje x en 45 grados
+        ax2.set_xticklabels(x2, rotation= -45, ha="center")
+        
         ax2.grid(zorder=1) # zorder define un orden de aparicion menor que las barras
         ax2.bar(x2, y2, zorder=2) #zorder define un orden de aparicion mayor que la grid
 
