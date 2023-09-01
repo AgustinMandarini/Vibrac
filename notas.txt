@@ -1,6 +1,6 @@
 La aplicacion utiliza la libreria de python pdfkit para convertir los templates html a pdf.
 Esta libreria necesita de otra libreria externa llamada wkhtmltopdf que debe ser instalada en windows.
 Para que funcione wkhtmltopdf, luego de instalarla, hay que agregar la ubicacion del ejecutable a la variable de entorno PATH.
-Normalmente suele instalarse en C:\Archivos de Programa\wkhtmltopdf\bin
+Normalmente suele instalarse en C:\Archivos de Programa\wkhtmltopdf\bin\wkhtmltopdf.exe
 AL MOMENTO DE EMPAQUETAR LA APLICACION HAY QUE VER COMO HACER PARA QUE EL INSTALADOR LA INSTALE JUNTO
 CON PYTHON Y EL RESTO DE LAS DEPENDENCIAS.

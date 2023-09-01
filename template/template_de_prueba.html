@@ -23,15 +23,8 @@
       }
 
       /* Estilos para las columnas de configuración */
-      .columna-config {
+      .columna {
         width: 32%;
-        float: left;
-        padding: 10px;
-        box-sizing: border-box;
-      }
-
-      .columna-resul {
-        width: 25%;
         float: left;
         padding: 10px;
         box-sizing: border-box;
@@ -61,18 +54,18 @@
 
     <!-- Caja de contenido con dos columnas para la configuración -->
     <div class="cuadro">
-      <div class="columna-config">
+      <div class="columna">
         <div class="fila">
           Intervalo de la muestra (s): {{ data[0]["Intervalo de muestra(s)"] }}
         </div>
         <div class="fila">Comienzo:</div>
         <div class="fila">Fin:</div>
       </div>
-      <div class="columna-config">
+      <div class="columna">
         <div class="fila">Duración:</div>
         <div class="fila">Tiempo en pausa:</div>
       </div>
-      <div class="columna-config">
+      <div class="columna">
         <div class="fila">
           Ponderación de frecuencia: {{ data[0]["Ponderacion"] }}
         </div>
@@ -87,24 +80,21 @@
 
     <!-- Caja de contenido con tres columnas para los resultados -->
     <div class="cuadro">
-      <div class="columna-resul">
+      <div class="columna">
         <div class="fila">Leq [dB]: {{ data[1]["Leq [dB]"] }}</div>
         <div class="fila">LAFMáx [dB]: {{ data[1]["LAFMáx [dB]"] }}</div>
-      </div>
-      <div class="columna-resul">
         <div class="fila">LMáx [dB]: {{ data[1]["LMáx [dB]"] }}</div>
+      </div>
+      <div class="columna">
         <div class="fila">LMín [dB]: {{ data[1]["LMín [dB]"] }}</div>
         <div class="fila">LPico [dB]: {{ data[1]["LPico [dB]"] }}</div>
-      </div>
-      <div class="columna-resul">
         <div class="fila">L05 [dB]: {{ data[1]["L05 [dB]"] }}</div>
+      </div>
+      <div class="columna">
         <div class="fila">L10 [dB]: {{ data[1]["L10 [dB]"] }}</div>
         <div class="fila">L50 [dB]: {{ data[1]["L50 [dB]"] }}</div>
-      </div>
-      <div class="columna-resul">
         <div class="fila">L90 [dB]: {{ data[1]["L90 [dB]"] }}</div>
         <div class="fila">L95 [dB]: {{ data[1]["L95 [dB]"] }}</div>
-
       </div>
     </div>
     <div class="grafico1">
