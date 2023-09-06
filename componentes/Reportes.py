@@ -33,7 +33,7 @@ class Reportes(tk.Toplevel):
     def create_main_reportes_window(self):
         
         # def borrar_datos_db():
-        #     conn = sqlite3.connect('Reportes_vibraciones')
+        #     conn = sqlite3.connect('Reportes_vibraciones_db')
         #     c = conn.cursor()
 
         #     c.execute("DELETE from empresas WHERE oid = " + box_borrar_registro.get())
@@ -140,7 +140,7 @@ class Reportes(tk.Toplevel):
 
     # Busca las empresas anteriormente utilizadas
     def ver_empresas(self):
-        conn = sqlite3.connect('Reportes_vibraciones')
+        conn = sqlite3.connect('Reportes_vibraciones_db')
         c = conn.cursor()
 
         c.execute("SELECT *, oid FROM empresas")
@@ -154,7 +154,7 @@ class Reportes(tk.Toplevel):
 
     # Agrega los datos ingresados a la tabla informes
     def agrergar_datos_db():
-        conn = sqlite3.connect('Reportes_vibraciones')
+        conn = sqlite3.connect('Reportes_vibraciones_db')
         c = conn.cursor()
 
         c.execute("SELECT oid FROM empresas WHERE oid=" + self.selected_empresa.get())

@@ -9,7 +9,6 @@ class Empresas(tk.Toplevel):
         self.geometry('640x480')
         self.title('Empresas')
 
-
         ttk.Button(self,
                 text='Close',
                 command=self.destroy).grid(row=1, column=1, padx=10, pady=10)
@@ -20,15 +19,32 @@ class Empresas(tk.Toplevel):
 
         input_frame = self.create_main_empresas_window()
         input_frame.grid(column=0, row=0)
-    
-    
 
-    # Crea un frame para la ventana empresas
     def create_main_empresas_window(self):
+        # Busca las empresas anteriormente utilizadas
+        def ver_empresas():
+            conn = sqlite3.connect('Reportes_vibraciones_db')
+            c = conn.cursor()
 
-
+            c.execute("SELECT *, oid FROM empresas")
+            empresas = c.fetchall()
+            
+            # Itera sobre los resultados de la consulta a la base de datos
+            imprimir_empresas = ""
+            
+            for empresa in empresas:
+                imprimir_empresas += str(empresa[0])+'\n'
+            
+            variable = tk.Variable(value=imprimir_empresas)
+            listbox = tk.Listbox(frame, listvariable=variable, height=6, selectmode=tk.SINGLE) 
+            listbox.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+            
+            conn.commit()
+            conn.close()
+            
+        # Crea un frame para la ventana empresas
         def borrar_datos_db():
-            conn = sqlite3.connect('Reportes_vibraciones')
+            conn = sqlite3.connect('Reportes_vibraciones_db')
             c = conn.cursor()
 
             c.execute("DELETE from empresas WHERE oid = " + box_borrar_registro.get())
@@ -38,9 +54,8 @@ class Empresas(tk.Toplevel):
 
         # Agrega los datos ingresados a la base de datos. Se ejecuta al clickear el boton "agregar"
         def agrergar_datos_db():
-            conn = sqlite3.connect('Reportes_vibraciones')
+            conn = sqlite3.connect('Reportes_vibraciones_db')
             c = conn.cursor()
-           
 
             c.execute("INSERT INTO empresas VALUES (:nombre, :direccion, :localidad, :provincia)", 
                     {
@@ -59,27 +74,10 @@ class Empresas(tk.Toplevel):
             localidad.delete(0, tk.END)
             provincia.delete(0, tk.END)
 
-        # Busca las empresas anteriormente utilizadas
-        def ver_empresas():
-            conn = sqlite3.connect('Reportes_vibraciones')
-            c = conn.cursor()
-
-            c.execute("SELECT *, oid FROM empresas")
-            empresas = c.fetchall()
-            
-            # Itera sobre los resultados de la consulta a la base de datos
-            imprimir_empresas = ""
-            for empresa in empresas:
-                imprimir_empresas += f'ID: {str(empresa[4])}, Nombre: {str(empresa[0])}, Direccion: {str(empresa[1])}\n'
-                                    
-            ver_empresas_label = ttk.Label(frame, text=imprimir_empresas)
-            ver_empresas_label.grid(row=12, column=0, columnspan=2)
-
-            conn.commit()
-            conn.close()
-
-
         frame = ttk.Frame(self)
+
+        # Ejecuta el listbox con las empresas
+        ver_empresas()
 
         # Nombre de la empresa
         ttk.Label(frame, text='Nombre:').grid(column=0, row=0, sticky=tk.W, pady=(10, 0))
@@ -104,11 +102,7 @@ class Empresas(tk.Toplevel):
 
         # Boton de agregar
         boton_agregar = ttk.Button(frame, text="Agregar", command=agrergar_datos_db, width= 10)
-        boton_agregar.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
-
-        # Boton buscar en base de datos
-        boton_ver_empresas = ttk.Button(frame, text="Ver empresas anteriores", command=ver_empresas, width= 10)
-        boton_ver_empresas.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+        boton_agregar.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
         # Borrar registro en base de datos
         box_borrar_registro = ttk.Entry(frame, width=30)
@@ -117,7 +111,6 @@ class Empresas(tk.Toplevel):
         label_borrar_registro.grid(row=10, column=0, pady=5)
         boton_borrar_registro = ttk.Button(frame, text="Borrar empresa", command=borrar_datos_db, width= 10)
         boton_borrar_registro.grid(row=11, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
-
 
         for widget in frame.winfo_children():
             widget.grid(padx=5, pady=5)
