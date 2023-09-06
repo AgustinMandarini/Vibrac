@@ -10,17 +10,20 @@ conn = sqlite3.connect('Reportes_vibraciones')
 c = conn.cursor()
 
 # Crea las tablas
-# c.execute("""CREATE TABLE empresas (
-#     nombre text,
-#     direccion text,
-#     localidad text,
-#     provincia text)
-#     """)
-# c.execute("""CREATE TABLE instrumentos (
-#     marca text,
-#     modelo text,
-#     nro_serie text)
-#     """)
+c.execute("""CREATE TABLE empresas_nueva (
+    nombre TEXT NOT NULL,
+    direccion TEXT,
+    localidad TEXT,
+    provincia TEXT
+)
+""")
+c.execute("""CREATE TABLE instrumentos (
+    marca TEXT NOT NULL,
+    modelo TEXT NOT NULL,
+    nro_serie INT NOT NULL,
+    fecha TEXT,
+    certificado_nro, INT)
+    """)
 # c.execute("""CREATE TABLE informes (
 #     nro_informe TEXT,
 #     titulo TEXT,
