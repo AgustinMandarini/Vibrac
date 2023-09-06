@@ -41,7 +41,7 @@ class Empresas(tk.Toplevel):
             
             conn.commit()
             conn.close()
-            
+
         # Crea un frame para la ventana empresas
         def borrar_datos_db():
             conn = sqlite3.connect('Reportes_vibraciones_db')
@@ -76,8 +76,6 @@ class Empresas(tk.Toplevel):
 
         frame = ttk.Frame(self)
 
-        # Ejecuta el listbox con las empresas
-        ver_empresas()
 
         # Nombre de la empresa
         ttk.Label(frame, text='Nombre:').grid(column=0, row=0, sticky=tk.W, pady=(10, 0))
@@ -102,7 +100,11 @@ class Empresas(tk.Toplevel):
 
         # Boton de agregar
         boton_agregar = ttk.Button(frame, text="Agregar", command=agrergar_datos_db, width= 10)
-        boton_agregar.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+        boton_agregar.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+        # Ejecuta el listbox con las empresas
+        ver_empresas()
+        
 
         # Borrar registro en base de datos
         box_borrar_registro = ttk.Entry(frame, width=30)
