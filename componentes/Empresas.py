@@ -125,6 +125,13 @@ class Empresas(tk.Toplevel):
                     self.error_popup(e)
                 finally:
                     conn.close()
+
+            # Obtener los datos del registro seleccionado desde la base de datos
+            conn = sqlite3.connect('Reportes_vibraciones_db')
+            c = conn.cursor()
+            c.execute("SELECT * FROM empresas WHERE nombre = ?", (self.empresa_seleccionada,))
+            registro = c.fetchone()  # Debería haber solo un registro con el mismo nombre
+
             # Crea una ventana emergente (Toplevel)
             popup = tk.Toplevel(self)
             popup.title("Actualizar informacion de empresa")
@@ -132,22 +139,25 @@ class Empresas(tk.Toplevel):
             # Nombre de la empresa
             ttk.Label(popup, text='Nombre:').grid(column=0, row=0, sticky=tk.W, pady=(10, 0))
             nombre = ttk.Entry(popup, width=30)
-            nombre.focus()
+            nombre.insert(0, registro[0])
             nombre.grid(column=1, row=0, sticky=tk.W, pady=(10, 0))
 
             # Direccion de la empresa:
             ttk.Label(popup, text='Direccion:').grid(column=0, row=1, sticky=tk.W)
             direccion = ttk.Entry(popup, width=30)
+            direccion.insert(0, registro[1])
             direccion.grid(column=1, row=1, sticky=tk.W)
 
             # Localidad de la empresa:
             ttk.Label(popup, text='Localidad:').grid(column=0, row=2, sticky=tk.W)
             localidad = ttk.Entry(popup, width=30)
+            localidad.insert(0, registro[2])
             localidad.grid(column=1, row=2, sticky=tk.W)
 
             # Provincia de la empresa:
             ttk.Label(popup, text='Provincia:').grid(column=0, row=3, sticky=tk.W)
             provincia = ttk.Entry(popup, width=30)
+            provincia.insert(0, registro[3])
             provincia.grid(column=1, row=3, sticky=tk.W)
 
             # Boton de agregar
