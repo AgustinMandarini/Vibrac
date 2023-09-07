@@ -9,10 +9,6 @@ class Empresas(tk.Toplevel):
         self.geometry('640x480')
         self.title('Empresas')
 
-        ttk.Button(self,
-                text='Close',
-                command=self.destroy).grid(row=1, column=1, padx=10, pady=10)
-
          # layout on the root window
         self.columnconfigure(0, weight=4)
         self.columnconfigure(1, weight=1)
@@ -29,13 +25,14 @@ class Empresas(tk.Toplevel):
 
     # Busca las empresas anteriormente utilizadas
     def ver_empresas(self):
-        conn = sqlite3.connect('Reportes_vibraciones_db')
+        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
         c = conn.cursor()
 
         c.execute("SELECT *, oid FROM empresas")
         empresas = c.fetchall()
         
         # Itera sobre los resultados de la consulta a la base de datos
+        # empresa[0] corresponde al nombre
         empresas_nuevas = [str(empresa[0]) for empresa in empresas]
             # Agregar las empresas recuperadas de la base de datos a la lista existente
         self.empresas.extend(empresas_nuevas)
@@ -54,7 +51,7 @@ class Empresas(tk.Toplevel):
     def create_ui(self):
         # Crea un frame para la ventana empresas
         def borrar_datos_db():
-            conn = sqlite3.connect('Reportes_vibraciones_db')
+            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
             c = conn.cursor()
             conn.commit()
             try:
@@ -70,8 +67,8 @@ class Empresas(tk.Toplevel):
                 conn.close()
 
         # Agrega los datos ingresados a la base de datos. Se ejecuta al clickear el boton "agregar"
-        def agrergar_datos_db():
-            conn = sqlite3.connect('Reportes_vibraciones_db')
+        def agregar_datos_db():
+            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
             c = conn.cursor()
             try:
                 c.execute("INSERT INTO empresas VALUES (:nombre, :direccion, :localidad, :provincia)", 
@@ -102,7 +99,7 @@ class Empresas(tk.Toplevel):
         def actualizar_popup():
             # Funcion encargada de actualizar la base de datos
             def actualizar_datos_db():
-                conn = sqlite3.connect('Reportes_vibraciones_db')
+                conn = sqlite3.connect('./db/Reportes_vibraciones_db')
                 c = conn.cursor()
                 try:
                     c.execute(f"UPDATE empresas SET nombre = :nombre, direccion = :direccion, localidad = :localidad, provincia = :provincia WHERE nombre = :empresa_seleccionada",
@@ -127,7 +124,7 @@ class Empresas(tk.Toplevel):
                     conn.close()
 
             # Obtener los datos del registro seleccionado desde la base de datos
-            conn = sqlite3.connect('Reportes_vibraciones_db')
+            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
             c = conn.cursor()
             c.execute("SELECT * FROM empresas WHERE nombre = ?", (self.empresa_seleccionada,))
             registro = c.fetchone()  # Debería haber solo un registro con el mismo nombre
@@ -160,9 +157,9 @@ class Empresas(tk.Toplevel):
             provincia.insert(0, registro[3])
             provincia.grid(column=1, row=3, sticky=tk.W)
 
-            # Boton de agregar
-            boton_agregar = ttk.Button(popup, text="Actualizar", command=actualizar_datos_db, width= 10)
-            boton_agregar.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+            # Boton de actualizar
+            boton_actualizar = ttk.Button(popup, text="Actualizar", command=actualizar_datos_db, width= 10)
+            boton_actualizar.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
         # AQUI COMIENZA EL FORMULARIO
         frame = ttk.Frame(self)
@@ -189,7 +186,7 @@ class Empresas(tk.Toplevel):
         provincia.grid(column=1, row=3, sticky=tk.W)
 
         # Boton de agregar
-        boton_agregar = ttk.Button(frame, text="Agregar", command=agrergar_datos_db, width= 10)
+        boton_agregar = ttk.Button(frame, text="Agregar", command=agregar_datos_db, width= 10)
         boton_agregar.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
          # Listbox para mostrar las empresas

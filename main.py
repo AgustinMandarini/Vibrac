@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from componentes.Reportes import Reportes
 from componentes.Empresas import Empresas
+from componentes.Instrumentos import Instrumentos
 
 class App(tk.Tk):
     def __init__(self):
@@ -38,6 +39,9 @@ class App(tk.Tk):
             window.grab_set()
         if text == 'Empresas':
             window = Empresas(self)
+            window.grab_set()
+        if text == 'Instrumentos':
+            window = Instrumentos(self)
             window.grab_set()
 
 if __name__ == "__main__":

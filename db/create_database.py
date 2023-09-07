@@ -4,13 +4,13 @@
 #! DESCOMENTAR LAS LINEAS c.execute(...) PARA CREAR LAS TABLAS !!!
 import sqlite3
 # Crea una base de datos para conectarse
-conn = sqlite3.connect('Reportes_vibraciones')
+conn = sqlite3.connect('Reportes_vibraciones_db')
 
 # Crea un cursor
 c = conn.cursor()
 
 # Crea las tablas
-c.execute("""CREATE TABLE empresas_nueva (
+c.execute("""CREATE TABLE empresas (
     nombre TEXT NOT NULL,
     direccion TEXT,
     localidad TEXT,
@@ -22,19 +22,19 @@ c.execute("""CREATE TABLE instrumentos (
     modelo TEXT NOT NULL,
     nro_serie INT NOT NULL,
     fecha TEXT,
-    certificado_nro, INT)
+    certificado_nro INT)
     """)
-# c.execute("""CREATE TABLE informes (
-#     nro_informe TEXT,
-#     titulo TEXT,
-#     empleado TEXT,
-#     fecha TEXT,
-#     id_empresa INTEGER,
-#     id_instrumento INTEGER,
-#     archivo_descarga BLOB,
-#     FOREIGN KEY (id_empresa) REFERENCES empresas (id_empresa),
-#     FOREIGN KEY (id_instrumento) REFERENCES instrumentos (id_instrumento)
-# )""")
+c.execute("""CREATE TABLE informes (
+    nro_informe TEXT,
+    titulo TEXT,
+    empleado TEXT,
+    fecha TEXT,
+    id_empresa INTEGER,
+    id_instrumento INTEGER,
+    archivo_descarga BLOB,
+    FOREIGN KEY (id_empresa) REFERENCES empresas (id_empresa),
+    FOREIGN KEY (id_instrumento) REFERENCES instrumentos (id_instrumento)
+)""")
 
 # Commitear los cambios en la base de datos
 conn.commit()
