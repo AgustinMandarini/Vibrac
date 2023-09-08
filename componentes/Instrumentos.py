@@ -1,6 +1,8 @@
 import tkinter as tk
 import sqlite3
+import ttkbootstrap as tb
 from tkinter import ttk
+
 
 class Instrumentos(tk.Toplevel):
     def __init__(self, parent):
@@ -9,7 +11,10 @@ class Instrumentos(tk.Toplevel):
         self.geometry('640x480')
         self.title('Instrumentos')
 
-         # layout on the root window
+        # Crea un estilo de ttkbootstrap
+        self.style = tb.Style(theme='darkly')
+
+        # layout on the root window
         self.columnconfigure(0, weight=4)
         self.columnconfigure(1, weight=1)
 
@@ -80,7 +85,7 @@ class Instrumentos(tk.Toplevel):
                                 'marca': marca.get(), 
                                 'modelo': modelo.get(),
                                 'nro_serie': nro_serie.get(),
-                                'fecha': fecha.get(),
+                                'fecha': fecha.entry.get(),
                                 'certificado_nro': certificado_nro.get(),
                             })
 
@@ -100,7 +105,6 @@ class Instrumentos(tk.Toplevel):
             marca.delete(0, tk.END)
             modelo.delete(0, tk.END)
             nro_serie.delete(0, tk.END)
-            fecha.delete(0, tk.END)
             certificado_nro.delete(0, tk.END)
 
 
@@ -120,7 +124,7 @@ class Instrumentos(tk.Toplevel):
                                 'marca': marca.get(),
                                 'modelo': modelo.get(),
                                 'nro_serie': nro_serie.get(),
-                                'fecha': fecha.get(),
+                                'fecha': fecha.entry.get(),
                                 'certificado_nro': certificado_nro.get(),
                                 'modelo_instrumento_seleccionado': self.modelo_instrumento_seleccionado
                             })
@@ -203,7 +207,7 @@ class Instrumentos(tk.Toplevel):
 
         # Fecha del instrumento:
         ttk.Label(frame, text='Fecha:').grid(column=0, row=3, sticky=tk.W)
-        fecha = ttk.Entry(frame, width=30)
+        fecha = tb.DateEntry(frame, width=30, bootstyle="danger")
         fecha.grid(column=1, row=3, sticky=tk.W)
 
         # certificado_nro del instrumento:
@@ -212,12 +216,16 @@ class Instrumentos(tk.Toplevel):
         certificado_nro.grid(column=1, row=4, sticky=tk.W)
 
         # Boton de agregar
-        boton_agregar = ttk.Button(frame, text="Agregar", command=agregar_datos_db, width= 10)
+        boton_agregar = tb.Button(frame, text="Agregar", command=agregar_datos_db, width= 10, bootstyle="primary")
         boton_agregar.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
+        # Separador, introduce el listbox
+        tb.Label(frame, text="Instrumentos guardados: ").grid(row=6, column=0, columnspan=2, sticky=tk.W, pady=10, padx=10)
+        tb.Separator(frame, bootstyle="primary").grid(row=7, column=0, columnspan=2, sticky=tk.W, ipadx=200, pady=10)
+        
         # Listbox para mostrar los instrumentos
         self.listbox = tk.Listbox(frame, height=6, selectmode=tk.SINGLE)
-        self.listbox.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+        self.listbox.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
         # link a scrollbar to a list
         scrollbar = ttk.Scrollbar(
             frame,
@@ -225,18 +233,18 @@ class Instrumentos(tk.Toplevel):
             command=self.listbox.yview
         )
         self.listbox['yscrollcommand'] = scrollbar.set
-        scrollbar.grid(row=6, column=2, sticky='ns')
+        scrollbar.grid(row=8, column=2, sticky='ns')
 
         # Vincular la selección del Listbox a la variable modelo_instrumento_seleccionado
         self.listbox.bind('<<ListboxSelect>>', lambda event: self.seleccionar_instrumento(event))
 
         # Boton borrar registro en base de datos
-        boton_borrar_registro = ttk.Button(frame, text="Borrar", command=borrar_datos_db, width=2)
-        boton_borrar_registro.grid(row=7, column=0, columnspan=1, pady=10, padx=10, ipadx=100)
+        boton_borrar_registro = ttk.Button(frame, text="Borrar", command=borrar_datos_db, width=2, bootstyle="danger")
+        boton_borrar_registro.grid(row=9, column=0, columnspan=1, pady=10, padx=10, ipadx=100)
 
         # Boton actualizar registro en base de datos
-        boton_actualizar_registro = ttk.Button(frame, text="Actualizar", command=actualizar_popup, width=2)
-        boton_actualizar_registro.grid(row=7, column=1, columnspan=1, pady=10, padx=10, ipadx=100)
+        boton_actualizar_registro = ttk.Button(frame, text="Actualizar", command=actualizar_popup, width=2, bootstyle="primary")
+        boton_actualizar_registro.grid(row=9, column=1, columnspan=1, pady=10, padx=10, ipadx=100)
 
         for widget in frame.winfo_children():
             widget.grid(padx=5, pady=5)
