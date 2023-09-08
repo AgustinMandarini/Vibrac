@@ -30,14 +30,19 @@ class Instrumentos(tk.Toplevel):
 
         c.execute("SELECT *, oid FROM instrumentos")
         instrumentos = c.fetchall()
+
+        conn.commit()
+        conn.close()
+        
         
         # Itera sobre los resultados de la consulta a la base de datos
         # instrumento[1] corresponde al modelo
+
         instrumentos_nuevos = [str(instrumento[1]) for instrumento in instrumentos]
         # Agregar los instrumentos recuperados de la base de datos a la lista existente
         self.instrumentos.extend(instrumentos_nuevos)
         self.actualizar_lista_instrumentos()
-
+        
         def items_selected(event):
             # Obtener el instrumento seleccionado
             indice = self.listbox.curselection()
@@ -45,8 +50,6 @@ class Instrumentos(tk.Toplevel):
 
         self.listbox.bind('<<ListboxSelect>>', items_selected)
         
-        conn.commit()
-        conn.close()
     
     def create_ui(self):
         # Crea un frame para la ventana instrumentos
@@ -71,19 +74,22 @@ class Instrumentos(tk.Toplevel):
             conn = sqlite3.connect('./db/Reportes_vibraciones_db')
             c = conn.cursor()
             try:
-                c.execute("INSERT INTO instrumentos VALUES (:marca, :modelo, :nro_serie, :fecha, :certificado_nro)", 
-                        {
-                            'marca': marca.get(), 
-                            'modelo': modelo.get(),
-                            'nro_serie': nro_serie.get(),
-                            'fecha': fecha.get(),
-                            'certificado_nro': certificado_nro.get(),
-                        })
+                if marca.get() and modelo.get() and nro_serie.get():
+                    c.execute("INSERT INTO instrumentos VALUES (:marca, :modelo, :nro_serie, :fecha, :certificado_nro)", 
+                            {
+                                'marca': marca.get(), 
+                                'modelo': modelo.get(),
+                                'nro_serie': nro_serie.get(),
+                                'fecha': fecha.get(),
+                                'certificado_nro': certificado_nro.get(),
+                            })
 
-                conn.commit()
-                # Agrega la empresa a la lista de instrumentos
-                self.instrumentos.append(marca.get())
-                self.actualizar_lista_instrumentos()
+                    conn.commit()
+                    # Agrega la empresa a la lista de instrumentos
+                    self.instrumentos.append(modelo.get())
+                    self.actualizar_lista_instrumentos()
+                else:
+                    self.error_popup("Los campos Marca, Modelo y Nro. Serie no deben estar vacios!")
             except Exception as e:
                 print(e)
                 self.error_popup(e)
@@ -99,7 +105,12 @@ class Instrumentos(tk.Toplevel):
 
 
         def actualizar_popup():
-            # Funcion encargada de actualizar la base de datos
+            # Funcion encargada de abrir una ventana popup con un formulario para actualizar la base de datos
+
+            # Crea una ventana emergente (Toplevel)
+            popup = tk.Toplevel(self)
+            popup.title("Actualizar informacion de instrumento")
+
             def actualizar_datos_db():
                 conn = sqlite3.connect('./db/Reportes_vibraciones_db')
                 c = conn.cursor()
@@ -120,6 +131,10 @@ class Instrumentos(tk.Toplevel):
                     self.instrumentos[index] = modelo.get()
                     self.actualizar_lista_instrumentos()
 
+                    # Al finalizar, cierra el pupup de actualizacion
+                    popup.destroy()
+
+
                 except Exception as e:
                     print(e)
                     self.error_popup(e)
@@ -130,13 +145,8 @@ class Instrumentos(tk.Toplevel):
             conn = sqlite3.connect('./db/Reportes_vibraciones_db')
             c = conn.cursor()
             c.execute("SELECT * FROM instrumentos WHERE modelo = ?", (self.modelo_instrumento_seleccionado,))
-            registro = c.fetchone()  # Debería haber solo un registro con el mismo modelo
-            print(self.modelo_instrumento_seleccionado)
-            print(registro)
 
-            # Crea una ventana emergente (Toplevel)
-            popup = tk.Toplevel(self)
-            popup.title("Actualizar informacion de instrumento")
+            registro = c.fetchone()  # Debería haber solo un registro con el mismo modelo
             
             # Marca del instrumento
             ttk.Label(popup, text='Marca:').grid(column=0, row=0, sticky=tk.W, pady=(10, 0))
