@@ -1,4 +1,5 @@
 import tkinter as tk
+import ttkbootstrap as tb
 from tkinter import ttk
 from componentes.Reportes import Reportes
 from componentes.Empresas import Empresas
@@ -15,6 +16,12 @@ class App(tk.Tk):
         screen_width = self.winfo_screenwidth()
         screen_height = self.winfo_screenheight()
 
+        # Crea un estilo de ttkbootstrap
+        self.style = tb.Style(theme='flatly')
+        
+        # Aplica las configuraciones globales a todos los widgets ttk
+        self.style.configure('.', font=("Calibri", 10))
+
         # find the center point
         center_x = int(screen_width/2 - window_width / 2)
         center_y = int(screen_height/2 - window_height / 2)
@@ -26,11 +33,12 @@ class App(tk.Tk):
         self.title('VIBRACIONES')
         
         buttons_labels = ['Equipo', 'Empresas', 'Instrumentos', 'Mediciones', 'Reportes']
-        # place a button on the root window for every string in buttons_labels
-        for text in buttons_labels:
-            ttk.Button(self,
+
+        # Botones principales ubicados horizontalmente
+        for index, text in enumerate(buttons_labels):
+            tb.Button(self,
                     text=text,
-                    command=lambda t=text: self.open_window(t)).pack(expand=True)
+                    command=lambda t=text: self.open_window(t)).grid(row=1, column=index, columnspan=1, pady=50, padx=30, ipadx=10)
                 
 
     def open_window(self, text):

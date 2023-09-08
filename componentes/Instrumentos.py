@@ -11,9 +11,6 @@ class Instrumentos(tk.Toplevel):
         self.geometry('640x480')
         self.title('Instrumentos')
 
-        # Crea un estilo de ttkbootstrap
-        self.style = tb.Style(theme='darkly')
-
         # layout on the root window
         self.columnconfigure(0, weight=4)
         self.columnconfigure(1, weight=1)

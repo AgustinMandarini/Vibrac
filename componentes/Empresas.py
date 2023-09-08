@@ -1,5 +1,6 @@
 import tkinter as tk
 import sqlite3
+import ttkbootstrap as tb
 from tkinter import ttk
 
 class Empresas(tk.Toplevel):
@@ -205,7 +206,7 @@ class Empresas(tk.Toplevel):
         self.listbox.bind('<<ListboxSelect>>', lambda event: self.seleccionar_empresa(event))
 
         # Boton borrar registro en base de datos
-        boton_borrar_registro = ttk.Button(frame, text="Borrar", command=borrar_datos_db, width=2)
+        boton_borrar_registro = ttk.Button(frame, text="Borrar", command=borrar_datos_db, width=2, bootstyle="danger")
         boton_borrar_registro.grid(row=6, column=0, columnspan=1, pady=10, padx=10, ipadx=100)
 
         # Boton actualizar registro en base de datos
