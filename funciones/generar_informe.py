@@ -9,7 +9,7 @@ import datetime
 import webbrowser
 import base64
 
-def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha):
+def generar_informe(ruta_archivo, empresa, instrumento, nro_informe, titulo, empleado, fecha, observaciones):
     # importa la funcion structure_data y retorna los dos grupos de datos
     # data contiene toda la informacion de cada una de las muestras
     # numSerie_fechaCalib contiene un array con el nro de serie y fecha de calibración
@@ -31,10 +31,12 @@ def generar_informe(ruta_archivo, empresa, nro_informe, titulo, empleado, fecha)
     html_content = template.render(
         data=data,
         empresa=empresa,
+        instrumento=instrumento,
         nro_informe=nro_informe, 
         titulo=titulo, 
         empleado=empleado, 
         fecha=fecha,
+        observaciones=observaciones,
         numSerie_fechaCalib=numSerie_fechaCalib,
         )
     # Configuracion del path para wkhtmltopdf

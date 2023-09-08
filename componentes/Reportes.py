@@ -1,7 +1,6 @@
 import tkinter as tk
 import sqlite3
-from tkinter import ttk
-from tkinter import filedialog
+from tkinter import ttk, filedialog, Text
 from funciones.generar_informe import generar_informe
 import datetime
 
@@ -21,25 +20,22 @@ class Reportes(tk.Toplevel):
         self.ruta_archivo = None
                 
         self.empresas = [] # Guardara los nombres de todas las empresas
-        self.selected_empresa = tk.StringVar() # Almacena la selección del Dropdown  
+        self.selected_empresa = tk.StringVar() # Almacena la selección del Dropdown
+
+        self.instrumentos = [] # Guardara los nombres de todas los instrumentos
+        self.selected_instrumento = tk.StringVar() # Almacena la selección del Dropdown  
 
         # Ejecuta la funcion ver_empresas al momento de iniciar el componente
         self.ver_empresas()
+
+        # Ejecuta la funcion ver_instrumentos al momento de iniciar el componente
+        self.ver_instrumentos()
 
         input_frame = self.create_main_reportes_window()
         input_frame.grid(column=0, row=0)
 
     # Crea un frame para la ventana reportes
     def create_main_reportes_window(self):
-        
-        # def borrar_datos_db():
-        #     conn = sqlite3.connect('./db/Reportes_vibraciones_db')
-        #     c = conn.cursor()
-
-        #     c.execute("DELETE from empresas WHERE oid = " + box_borrar_registro.get())
-
-        #     conn.commit()
-        #     conn.close()
 
         # Crea un frame sobre donde armar el formulario
         frame = ttk.Frame(self)
@@ -68,24 +64,28 @@ class Reportes(tk.Toplevel):
         ttk.Label(frame, text='Empresa:').grid(column=0, row=4, sticky=tk.W)
         self.dropdown_empresas = ttk.Combobox(frame, textvariable=self.selected_empresa, values=self.empresas)
         self.dropdown_empresas.grid(row=4, column=1, columnspan=2, pady=10, padx=10, ipadx=100)
-        # box_borrar_registro = ttk.Entry(frame, width=30)
-        # box_borrar_registro.grid(row=10, column=1, pady=5)
-        # label_borrar_registro = ttk.Label(frame, text="Borrar ID: ")
-        # label_borrar_registro.grid(row=10, column=0, pady=5)
-        # boton_borrar_registro = ttk.Button(frame, text="Borrar empresa", command=borrar_datos_db, width= 10)
-        # boton_borrar_registro.grid(row=11, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+
+        # Dropdown de instrumentos
+        ttk.Label(frame, text='Instrumento:').grid(column=0, row=5, sticky=tk.W)
+        self.dropdown_instrumentos = ttk.Combobox(frame, textvariable=self.selected_instrumento, values=self.instrumentos)
+        self.dropdown_instrumentos.grid(row=5, column=1, columnspan=2, pady=10, padx=10, ipadx=100)
+
+        # Textarea de observaciones
+        ttk.Label(frame, text='Observaciones:').grid(column=0, row=6, sticky=tk.W)
+        self.observaciones = Text(frame, height=5, width=20)
+        self.observaciones.grid(row=6, column=1, columnspan=2, pady=10, padx=10, ipadx=100)
 
         # Boton de seleccion de archivo
         boton_abrir_archivo = ttk.Button(frame, text='Buscar archivo', command=self.abrir_archivo)
-        boton_abrir_archivo.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+        boton_abrir_archivo.grid(row=7, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
         # Boton para imprimir informe
         boton_imprimir_informe = ttk.Button(frame, text="Imprimir Informe", command=self.imprimir_informe, width= 10)
-        boton_imprimir_informe.grid(row=6, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+        boton_imprimir_informe.grid(row=8, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
         # Boton para imprimir informe
-        boton_mostrar_informes = ttk.Button(frame, text="Ver informes emitidos", command=None, width= 10)
-        boton_mostrar_informes.grid(row=9, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+        # boton_mostrar_informes = ttk.Button(frame, text="Ver informes emitidos", command=None, width= 10)
+        # boton_mostrar_informes.grid(row=9, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
 
         for widget in frame.winfo_children():
             widget.grid(padx=5, pady=5)
@@ -118,6 +118,8 @@ class Reportes(tk.Toplevel):
                 self.mostrar_popup("Debe seleccionar un archivo")
             elif not self.selected_empresa.get():
                 self.mostrar_popup("Debe seleccionar una empresa")
+            elif not self.selected_instrumento:
+                self.mostrar_popup("Debe seleccionar un instrumento")
             else:
                 try:
                     # Accede a las variables de los Entry
@@ -125,20 +127,23 @@ class Reportes(tk.Toplevel):
                     titulo = self.titulo.get()
                     empleado = self.empleado.get()
                     fecha = self.fecha
+                    observaciones = self.observaciones.get("1.0", "end")
                     
                     # Llama a la funcion importada "generar_informe"
                     generar_informe(
                         self.ruta_archivo, 
-                        self.selected_empresa.get(), 
+                        self.selected_empresa.get(),
+                        self.selected_instrumento.get(), 
                         nro_informe, 
                         titulo, 
                         empleado, 
-                        fecha)
+                        fecha,
+                        observaciones)
                 except Exception as e:
                     print(e)
                     self.mostrar_popup(e)
 
-    # Busca las empresas anteriormente utilizadas
+    # Busca las empresas anteriormente agregadas
     def ver_empresas(self):
         conn = sqlite3.connect('./db/Reportes_vibraciones_db')
         c = conn.cursor()
@@ -148,6 +153,20 @@ class Reportes(tk.Toplevel):
         
         # Itera sobre los resultados de la consulta a la base de datos y agrega los nombres de las empresas a la variable
         self.empresas = [empresa[0] for empresa in empresas]
+                                
+        conn.commit()
+        conn.close()
+
+    # Busca los instrumentos anteriormente agregados
+    def ver_instrumentos(self):
+        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+        c = conn.cursor()
+
+        c.execute("SELECT *, oid FROM instrumentos")
+        instrumentos = c.fetchall()
+        
+        # Itera sobre los resultados de la consulta a la base de datos y agrega los nombres de las empresas a la variable
+        self.instrumentos = [instrumento[1] for instrumento in instrumentos]
                                 
         conn.commit()
         conn.close()

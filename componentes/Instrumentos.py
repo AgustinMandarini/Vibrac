@@ -60,11 +60,14 @@ class Instrumentos(tk.Toplevel):
             c = conn.cursor()
             conn.commit()
             try:
-                c.execute("DELETE from instrumentos WHERE modelo = ?", (self.modelo_instrumento_seleccionado,))
-                conn.commit()
-                # Borra el instrumento de la lista de instrumentos
-                self.instrumentos.remove(self.modelo_instrumento_seleccionado)
-                self.actualizar_lista_instrumentos()
+                if self.modelo_instrumento_seleccionado:
+                    c.execute("DELETE from instrumentos WHERE modelo = ?", (self.modelo_instrumento_seleccionado,))
+                    conn.commit()
+                    # Borra el instrumento de la lista de instrumentos
+                    self.instrumentos.remove(self.modelo_instrumento_seleccionado)
+                    self.actualizar_lista_instrumentos()
+                else:
+                    self.error_popup("Debe seleccionar un instrumento")
             except Exception as e:
                 print(e)
                 self.error_popup(e)
@@ -108,80 +111,83 @@ class Instrumentos(tk.Toplevel):
         def actualizar_popup():
             # Funcion encargada de abrir una ventana popup con un formulario para actualizar la base de datos
 
-            # Crea una ventana emergente (Toplevel)
-            popup = tk.Toplevel(self)
-            popup.title("Actualizar informacion de instrumento")
+            if self.modelo_instrumento_seleccionado:
+                # Crea una ventana emergente (Toplevel)
+                popup = tk.Toplevel(self)
+                popup.title("Actualizar informacion de instrumento")
 
-            def actualizar_datos_db():
+                def actualizar_datos_db():
+                    conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+                    c = conn.cursor()
+                    try:
+                        c.execute(f"UPDATE instrumentos SET marca = :marca, modelo = :modelo, nro_serie = :nro_serie, fecha = :fecha, certificado_nro = :certificado_nro WHERE modelo = :modelo_instrumento_seleccionado",
+                                {
+                                    'marca': marca.get(),
+                                    'modelo': modelo.get(),
+                                    'nro_serie': nro_serie.get(),
+                                    'fecha': fecha.entry.get(),
+                                    'certificado_nro': certificado_nro.get(),
+                                    'modelo_instrumento_seleccionado': self.modelo_instrumento_seleccionado
+                                })
+                        conn.commit()
+                        
+                        # Actualiza la listbox con el nuevo cambio realizado
+                        index = self.instrumentos.index(self.modelo_instrumento_seleccionado)
+                        self.instrumentos[index] = modelo.get()
+                        self.actualizar_lista_instrumentos()
+
+                        # Al finalizar, cierra el pupup de actualizacion
+                        popup.destroy()
+
+
+                    except Exception as e:
+                        print(e)
+                        self.error_popup(e)
+                    finally:
+                        conn.close()
+
+                # Obtener los datos del registro seleccionado desde la base de datos
                 conn = sqlite3.connect('./db/Reportes_vibraciones_db')
                 c = conn.cursor()
-                try:
-                    c.execute(f"UPDATE instrumentos SET marca = :marca, modelo = :modelo, nro_serie = :nro_serie, fecha = :fecha, certificado_nro = :certificado_nro WHERE modelo = :modelo_instrumento_seleccionado",
-                            {
-                                'marca': marca.get(),
-                                'modelo': modelo.get(),
-                                'nro_serie': nro_serie.get(),
-                                'fecha': fecha.entry.get(),
-                                'certificado_nro': certificado_nro.get(),
-                                'modelo_instrumento_seleccionado': self.modelo_instrumento_seleccionado
-                            })
-
-                    conn.commit()
-                    # Actualiza la listbox con el nuevo cambio realizado
-                    index = self.instrumentos.index(self.modelo_instrumento_seleccionado)
-                    self.instrumentos[index] = modelo.get()
-                    self.actualizar_lista_instrumentos()
-
-                    # Al finalizar, cierra el pupup de actualizacion
-                    popup.destroy()
-
-
-                except Exception as e:
-                    print(e)
-                    self.error_popup(e)
-                finally:
-                    conn.close()
-
-            # Obtener los datos del registro seleccionado desde la base de datos
-            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
-            c = conn.cursor()
-            c.execute("SELECT * FROM instrumentos WHERE modelo = ?", (self.modelo_instrumento_seleccionado,))
-
-            registro = c.fetchone()  # Debería haber solo un registro con el mismo modelo
             
-            # Marca del instrumento
-            ttk.Label(popup, text='Marca:').grid(column=0, row=0, sticky=tk.W, pady=(10, 0))
-            marca = ttk.Entry(popup, width=30)
-            marca.insert(0, registro[0])
-            marca.grid(column=1, row=0, sticky=tk.W, pady=(10, 0))
+                c.execute("SELECT * FROM instrumentos WHERE modelo = ?", (self.modelo_instrumento_seleccionado,))
+                registro = c.fetchone()  # Debería haber solo un registro con el mismo modelo
+                conn.close()
+            
+                # Marca del instrumento
+                ttk.Label(popup, text='Marca:').grid(column=0, row=0, sticky=tk.W, pady=(10, 0))
+                marca = ttk.Entry(popup, width=30)
+                marca.insert(0, registro[0])
+                marca.grid(column=1, row=0, sticky=tk.W, padx=10, pady=10)
 
-            # Modelo del instrumento:
-            ttk.Label(popup, text='Modelo:').grid(column=0, row=1, sticky=tk.W)
-            modelo = ttk.Entry(popup, width=30)
-            modelo.insert(0, registro[1])
-            modelo.grid(column=1, row=1, sticky=tk.W)
+                # Modelo del instrumento:
+                ttk.Label(popup, text='Modelo:').grid(column=0, row=1, sticky=tk.W)
+                modelo = ttk.Entry(popup, width=30)
+                modelo.insert(0, registro[1])
+                modelo.grid(column=1, row=1, sticky=tk.W, padx=10, pady=10)
 
-            # nro_serie del instrumento:
-            ttk.Label(popup, text=' nro_serie:').grid(column=0, row=2, sticky=tk.W)
-            nro_serie = ttk.Entry(popup, width=30)
-            nro_serie.insert(0, registro[2])
-            nro_serie.grid(column=1, row=2, sticky=tk.W)
+                # nro_serie del instrumento:
+                ttk.Label(popup, text='Nro Serie:').grid(column=0, row=2, sticky=tk.W)
+                nro_serie = ttk.Entry(popup, width=30)
+                nro_serie.insert(0, registro[2])
+                nro_serie.grid(column=1, row=2, sticky=tk.W, padx=10, pady=10)
 
-            # Fecha del instrumento:
-            ttk.Label(popup, text='Fecha:').grid(column=0, row=3, sticky=tk.W)
-            fecha = ttk.Entry(popup, width=30)
-            fecha.insert(0, registro[3])
-            fecha.grid(column=1, row=3, sticky=tk.W)
+                # Fecha del instrumento:
+                ttk.Label(popup, text='Fecha:').grid(column=0, row=3, sticky=tk.W)
+                fecha = tb.DateEntry(popup, width=30, bootstyle="danger")
+                fecha.grid(column=1, row=3, sticky=tk.W, padx=10, pady=10)
 
-            # Nro Certificado del instrumento:
-            ttk.Label(popup, text='Nro Certificado:').grid(column=0, row=3, sticky=tk.W)
-            certificado_nro = ttk.Entry(popup, width=30)
-            certificado_nro.insert(0, registro[4])
-            certificado_nro.grid(column=1, row=3, sticky=tk.W)
+                # Nro Certificado del instrumento:
+                ttk.Label(popup, text='Nro Certificado:').grid(column=0, row=3, sticky=tk.W)
+                certificado_nro = ttk.Entry(popup, width=30)
+                certificado_nro.insert(0, registro[4])
+                certificado_nro.grid(column=1, row=4, sticky=tk.W, padx=10, pady=10)
 
-            # Boton de actualizar
-            boton_actualizar = ttk.Button(popup, text="Actualizar", command=actualizar_datos_db, width= 10)
-            boton_actualizar.grid(row=4, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+                # Boton de actualizar
+                boton_actualizar = ttk.Button(popup, text="Actualizar", command=actualizar_datos_db, width= 10)
+                boton_actualizar.grid(row=5, column=0, columnspan=2, pady=10, padx=10, ipadx=100)
+            else:
+                self.error_popup("Debe seleccionar un instrumento")
 
         # AQUI COMIENZA EL FORMULARIO
         frame = ttk.Frame(self)
@@ -240,7 +246,7 @@ class Instrumentos(tk.Toplevel):
         boton_borrar_registro.grid(row=9, column=0, columnspan=1, pady=10, padx=10, ipadx=100)
 
         # Boton actualizar registro en base de datos
-        boton_actualizar_registro = ttk.Button(frame, text="Actualizar", command=actualizar_popup, width=2, bootstyle="primary")
+        boton_actualizar_registro = ttk.Button(frame, text="Modificar", command=actualizar_popup, width=2, bootstyle="primary")
         boton_actualizar_registro.grid(row=9, column=1, columnspan=1, pady=10, padx=10, ipadx=100)
 
         for widget in frame.winfo_children():

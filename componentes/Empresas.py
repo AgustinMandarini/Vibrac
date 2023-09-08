@@ -210,7 +210,7 @@ class Empresas(tk.Toplevel):
         boton_borrar_registro.grid(row=6, column=0, columnspan=1, pady=10, padx=10, ipadx=100)
 
         # Boton actualizar registro en base de datos
-        boton_actualizar_registro = ttk.Button(frame, text="Actualizar", command=actualizar_popup, width=2)
+        boton_actualizar_registro = ttk.Button(frame, text="Modificar", command=actualizar_popup, width=2)
         boton_actualizar_registro.grid(row=6, column=1, columnspan=1, pady=10, padx=10, ipadx=100)
 
         for widget in frame.winfo_children():

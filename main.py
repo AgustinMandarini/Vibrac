@@ -9,7 +9,7 @@ class App(tk.Tk):
     def __init__(self):
         super().__init__()
 
-        window_width = 800
+        window_width = 744
         window_height = 600
 
         # get the screen dimension
@@ -20,7 +20,7 @@ class App(tk.Tk):
         self.style = tb.Style(theme='flatly')
         
         # Aplica las configuraciones globales a todos los widgets ttk
-        self.style.configure('.', font=("Calibri", 10))
+        self.style.configure('.', font=("Calibri", 12))
 
         # find the center point
         center_x = int(screen_width/2 - window_width / 2)
@@ -38,7 +38,7 @@ class App(tk.Tk):
         for index, text in enumerate(buttons_labels):
             tb.Button(self,
                     text=text,
-                    command=lambda t=text: self.open_window(t)).grid(row=1, column=index, columnspan=1, pady=50, padx=30, ipadx=10)
+                    command=lambda t=text: self.open_window(t)).grid(row=1, column=index, columnspan=1, pady=50, padx=20, ipadx=10)
                 
 
     def open_window(self, text):
@@ -54,4 +54,5 @@ class App(tk.Tk):
 
 if __name__ == "__main__":
     app = App()
+    app.resizable(False, False)
     app.mainloop()
