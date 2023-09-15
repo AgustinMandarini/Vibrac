@@ -6,6 +6,8 @@ from tkinter import ttk
 from componentes.Reportes import Reportes
 from componentes.Empresas import Empresas
 from componentes.Instrumentos import Instrumentos
+import pkg_resources
+import io
 
 class Splash(tk.Toplevel):
     def __init__(self, parent):
@@ -29,8 +31,10 @@ class Splash(tk.Toplevel):
         self.canvas = tk.Canvas(self, width=window_width, height=window_height)
         self.canvas.pack()
 
+        image_data = pkg_resources.resource_string("__main__", 'img/instrutech_TRIAX.jpeg')
+
         # Cargar y redimensionar la imagen
-        original_image = Image.open("./img/instrutech_TRIAX.jpeg")
+        original_image = Image.open(io.BytesIO(image_data))
 
         # Obtener el ancho y alto de la imagen original
         original_width, original_height = original_image.size

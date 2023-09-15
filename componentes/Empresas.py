@@ -2,10 +2,14 @@ import tkinter as tk
 import sqlite3
 import ttkbootstrap as tb
 from tkinter import ttk
+import pkg_resources
 
 class Empresas(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
+
+        # Obtener la ruta de la base de datos empaquetada
+        self.db_path = pkg_resources.resource_filename("__main__", 'db/Reportes_vibraciones_db')
 
         self.geometry('640x480')
         self.title('Empresas')
@@ -26,7 +30,8 @@ class Empresas(tk.Toplevel):
 
     # Busca las empresas anteriormente utilizadas
     def ver_empresas(self):
-        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+    
+        conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
         c.execute("SELECT *, oid FROM empresas")
@@ -52,7 +57,7 @@ class Empresas(tk.Toplevel):
     def create_ui(self):
         # Crea un frame para la ventana empresas
         def borrar_datos_db():
-            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+            conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
             conn.commit()
             try:
@@ -69,7 +74,7 @@ class Empresas(tk.Toplevel):
 
         # Agrega los datos ingresados a la base de datos. Se ejecuta al clickear el boton "agregar"
         def agregar_datos_db():
-            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+            conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
             try:
                 c.execute("INSERT INTO empresas VALUES (:nombre, :direccion, :localidad, :provincia)", 
@@ -100,7 +105,7 @@ class Empresas(tk.Toplevel):
         def actualizar_popup():
             # Funcion encargada de actualizar la base de datos
             def actualizar_datos_db():
-                conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+                conn = sqlite3.connect(self.db_path)
                 c = conn.cursor()
                 try:
                     c.execute(f"UPDATE empresas SET nombre = :nombre, direccion = :direccion, localidad = :localidad, provincia = :provincia WHERE nombre = :empresa_seleccionada",
@@ -125,7 +130,7 @@ class Empresas(tk.Toplevel):
                     conn.close()
 
             # Obtener los datos del registro seleccionado desde la base de datos
-            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+            conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
             c.execute("SELECT * FROM empresas WHERE nombre = ?", (self.empresa_seleccionada,))
             registro = c.fetchone()  # Debería haber solo un registro con el mismo nombre
