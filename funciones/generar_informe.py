@@ -6,8 +6,8 @@ from funciones.structure_data import structure_data
 import matplotlib.pyplot as plt
 import numpy as np
 import datetime
-import webbrowser
 import base64
+from funciones.resource_path import resource_path
 
 def generar_informe(ruta_archivo, empresa, instrumento, nro_informe, titulo, empleado, fecha, observaciones):
     # importa la funcion structure_data y retorna los dos grupos de datos
@@ -16,14 +16,11 @@ def generar_informe(ruta_archivo, empresa, instrumento, nro_informe, titulo, emp
     data, numSerie_fechaCalib = structure_data(ruta_archivo)
     ##### CREAR PAGINA 1 DEL INFORME A PARTIR DE UN TEMPLATE HTML #####
 
-    # Obtener la ruta del directorio donde se encuentra el script actual
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-
-    # Construir la ruta al directorio de templates
-    template_directory = os.path.join(script_directory, '..', 'template')
-
+     # Utiliza la funcion resource_path para traer el path tanto si la aplicacion corre en distribucion o en desarrollo
+    template_path = resource_path('template')
+    
     # Crear un entorno Jinja2
-    env = Environment(loader=FileSystemLoader(template_directory))
+    env = Environment(loader=FileSystemLoader(template_path))
 
     # Cargar el template HTML
     template = env.get_template('pagina_1_template.html')
@@ -95,7 +92,7 @@ def generar_informe(ruta_archivo, empresa, instrumento, nro_informe, titulo, emp
         ax2.bar(x2, y2, zorder=2) #zorder define un orden de aparicion mayor que la grid
 
         # Renderizar el template con los datos
-        img_path = os.path.join(template_directory, 'grafico1.png')
+        img_path = os.path.join(template_path, 'grafico1.png')
         plt.savefig(img_path)
 
         # Convertir la imagen en base64 para que pdfkit pueda leerla y transformarla en pdf
@@ -113,7 +110,6 @@ def generar_informe(ruta_archivo, empresa, instrumento, nro_informe, titulo, emp
         pdfkit.from_string(temp_html_content, temp_pdf_path, configuration=config)
         pdf_reader = PyPDF2.PdfReader(temp_pdf_path)
         pdf_writer.add_page(pdf_reader.pages[0])
-        
 
         os.remove(temp_pdf_path)
         os.remove(img_path)

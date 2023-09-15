@@ -6,7 +6,7 @@ from tkinter import ttk
 from componentes.Reportes import Reportes
 from componentes.Empresas import Empresas
 from componentes.Instrumentos import Instrumentos
-import pkg_resources
+from funciones.resource_path import resource_path
 import io
 
 class Splash(tk.Toplevel):
@@ -31,10 +31,15 @@ class Splash(tk.Toplevel):
         self.canvas = tk.Canvas(self, width=window_width, height=window_height)
         self.canvas.pack()
 
-        image_data = pkg_resources.resource_string("__main__", 'img/instrutech_TRIAX.jpeg')
+        # Utiliza la funcion resource_path para traer el path tanto si la aplicacion corre en distribucion o en desarrollo
+        image_data = resource_path('img\\instrutech_TRIAX.jpeg')
+
+        # Cargar la imagen como un objeto bytes
+        with open(image_data, 'rb') as f:
+            image_bytes = f.read()
 
         # Cargar y redimensionar la imagen
-        original_image = Image.open(io.BytesIO(image_data))
+        original_image = Image.open(io.BytesIO(image_bytes))
 
         # Obtener el ancho y alto de la imagen original
         original_width, original_height = original_image.size

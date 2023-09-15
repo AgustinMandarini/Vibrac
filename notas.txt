@@ -6,3 +6,8 @@ Normalmente suele instalarse en C:\Archivos de Programa\wkhtmltopdf\bin\wkhtmlto
 Al momento de empaquetar con pyinstaller: pyinstaller --onefile --add-data "img;img" --add-data "html;html" --add-data "data;data" tu_script.py
 Esto significa que cada archivo que deba buscar la aplicacion por directorio, debe ser especificado en esta linea
 Alternativamente se puede utilizar pyinstaller GUI para hacerlo de una manera mas comoda y visual.
+
+Comandos pyinstaller, del tutorial ------> https://www.youtube.com/watch?v=p3tSLatmGvU
+
+1° pyinstaller main.py
+2° pyinstaller --name vibraciones --onefile --windowed main.py

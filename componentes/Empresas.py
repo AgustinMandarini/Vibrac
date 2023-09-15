@@ -2,14 +2,15 @@ import tkinter as tk
 import sqlite3
 import ttkbootstrap as tb
 from tkinter import ttk
-import pkg_resources
+from funciones.resource_path import resource_path
+
 
 class Empresas(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
 
-        # Obtener la ruta de la base de datos empaquetada
-        self.db_path = pkg_resources.resource_filename("__main__", 'db/Reportes_vibraciones_db')
+        # Utiliza la funcion resource_path para traer el path tanto si la aplicacion corre en distribucion o en desarrollo
+        self.db_path = resource_path('db\\Reportes_vibraciones_db')
 
         self.geometry('640x480')
         self.title('Empresas')

@@ -2,11 +2,14 @@ import tkinter as tk
 import sqlite3
 import ttkbootstrap as tb
 from tkinter import ttk
-
+from funciones.resource_path import resource_path
 
 class Instrumentos(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
+
+        # Utiliza la funcion resource_path para traer el path tanto si la aplicacion corre en distribucion o en desarrollo
+        self.db_path = resource_path('db\\Reportes_vibraciones_db')
 
         self.geometry('640x480')
         self.title('Instrumentos')
@@ -27,7 +30,7 @@ class Instrumentos(tk.Toplevel):
 
     # Busca las instrumentos anteriormente utilizadas
     def ver_instrumentos(self):
-        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+        conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
         c.execute("SELECT *, oid FROM instrumentos")
@@ -56,7 +59,7 @@ class Instrumentos(tk.Toplevel):
     def create_ui(self):
         # Crea un frame para la ventana instrumentos
         def borrar_datos_db():
-            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+            conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
             conn.commit()
             try:
@@ -76,7 +79,7 @@ class Instrumentos(tk.Toplevel):
 
         # Agrega los datos ingresados a la base de datos. Se ejecuta al clickear el boton "agregar"
         def agregar_datos_db():
-            conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+            conn = sqlite3.connect(self.db_path)
             c = conn.cursor()
             try:
                 if marca.get() and modelo.get() and nro_serie.get():
@@ -117,7 +120,7 @@ class Instrumentos(tk.Toplevel):
                 popup.title("Actualizar informacion de instrumento")
 
                 def actualizar_datos_db():
-                    conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+                    conn = sqlite3.connect(self.db_path)
                     c = conn.cursor()
                     try:
                         c.execute(f"UPDATE instrumentos SET marca = :marca, modelo = :modelo, nro_serie = :nro_serie, fecha = :fecha, certificado_nro = :certificado_nro WHERE modelo = :modelo_instrumento_seleccionado",
@@ -147,7 +150,7 @@ class Instrumentos(tk.Toplevel):
                         conn.close()
 
                 # Obtener los datos del registro seleccionado desde la base de datos
-                conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+                conn = sqlite3.connect(self.db_path)
                 c = conn.cursor()
             
                 c.execute("SELECT * FROM instrumentos WHERE modelo = ?", (self.modelo_instrumento_seleccionado,))

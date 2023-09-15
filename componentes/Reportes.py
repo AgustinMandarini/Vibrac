@@ -1,12 +1,16 @@
 import tkinter as tk
 import sqlite3
+import datetime
 from tkinter import ttk, filedialog, Text
 from funciones.generar_informe import generar_informe
-import datetime
+from funciones.resource_path import resource_path
 
 class Reportes(tk.Toplevel):
     def __init__(self, parent):
         super().__init__(parent)
+
+        # Utiliza la funcion resource_path para traer el path tanto si la aplicacion corre en distribucion o en desarrollo
+        self.db_path = resource_path('db\\Reportes_vibraciones_db')
 
         self.geometry('640x480')
         self.title('Reportes')
@@ -145,7 +149,7 @@ class Reportes(tk.Toplevel):
 
     # Busca las empresas anteriormente agregadas
     def ver_empresas(self):
-        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+        conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
         c.execute("SELECT *, oid FROM empresas")
@@ -159,7 +163,7 @@ class Reportes(tk.Toplevel):
 
     # Busca los instrumentos anteriormente agregados
     def ver_instrumentos(self):
-        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+        conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
         c.execute("SELECT *, oid FROM instrumentos")
@@ -173,7 +177,7 @@ class Reportes(tk.Toplevel):
 
     # Agrega los datos ingresados a la tabla informes
     def agrergar_datos_db():
-        conn = sqlite3.connect('./db/Reportes_vibraciones_db')
+        conn = sqlite3.connect(self.db_path)
         c = conn.cursor()
 
         c.execute("SELECT oid FROM empresas WHERE oid=" + self.selected_empresa.get())
