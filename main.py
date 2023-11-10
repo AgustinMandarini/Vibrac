@@ -6,6 +6,7 @@ from tkinter import ttk
 from componentes.Reportes import Reportes
 from componentes.Empresas import Empresas
 from componentes.Instrumentos import Instrumentos
+from componentes.Equipo import Equipo
 from funciones.resource_path import resource_path
 import io
 
@@ -117,6 +118,9 @@ class App(tk.Tk):
             window.grab_set()
         if text == 'Instrumentos':
             window = Instrumentos(self)
+            window.grab_set()
+        if text == 'Equipo':
+            window = Equipo(self)
             window.grab_set()
 
 if __name__ == "__main__":
