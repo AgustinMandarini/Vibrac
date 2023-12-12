@@ -21,14 +21,15 @@ def structure_data(ruta_archivo):
     # En caso de que el txt venga con un string de salto de linea ('\n') ademas del salto de linea propieamente dicho, la siguiente
     # linea se encarga de eliminar el caracter sobrante 
     newDato = [linea.replace("\\n", "") for linea in newDato]
-
+    
     # Se crean diccionarios y arrays para cada parte del informe (Encabezado, resultadoss, grafico1, grafico2, numSerie_fechaCalib)
     data = []
     encabezado = {"Fecha": "","Hora":"","Nombre":"","Cantidad de Muestras":"","Intervalo de muestra(s)":"", "Ponderacion":"","Integracion":"", "Analisis":""}
     resultados = {"Leq [dB]":"", "LAFMáx [dB]":"","LMáx [dB]":"", "LMín [dB]":"", "LPico [dB]":"", "L05 [dB]":"","L10 [dB]":"", "L50 [dB]":"", "L90 [dB]":"","L95 [dB]":""}
     grafico1 = []
     grafico2 = []
-    numSerie_fechaCalib = newDato.pop(-1).split(",") # Ultimo renglon del txt, que tiene el nro de serie y fecha de calibración
+    
+    numSerie_fechaCalib = newDato[-1].split(",") # Ultimo renglon del txt, que tiene el nro de serie y fecha de calibración
 
     for index, dato in enumerate(newDato):
 
@@ -61,7 +62,6 @@ def structure_data(ruta_archivo):
             # Elimina los primeros 4 indices que son los datos del primer bloque (Medicion) para que no se pise con el siguiente
             # bloque de medicon al momento de hacer append a la variable dat
             del dato[4:] 
-        
     # Retorna un array con data (datos de las muestras) y numSerie_fechaCalib
     return [ data, numSerie_fechaCalib ]
 
