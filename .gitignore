@@ -1,1 +1,3 @@
 virtual_env
+_pyache_/
+*.pyc

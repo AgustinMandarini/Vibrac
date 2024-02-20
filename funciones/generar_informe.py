@@ -35,6 +35,7 @@ def generar_informe(ruta_archivo, mediciones, empresa, instrumento, nro_informe,
         fecha=fecha,
         observaciones=observaciones,
         numSerie_fechaCalib=numSerie_fechaCalib,
+        mediciones=mediciones
         )
     # Configuracion del path para wkhtmltopdf
     path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'

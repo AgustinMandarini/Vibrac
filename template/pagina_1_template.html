@@ -119,13 +119,15 @@
         <th>LMín [dB]</th>
       </tr>
       {% for muestra in data %}
-      <tr class="row">
-        <td>{{ muestra[0]["Nombre"] }}</td>
-        <td>{{ muestra[1]["Leq [dB]"] }}</td>
-        <td>{{ muestra[1]["LAFMáx [dB]"] }}</td>
-        <td>{{ muestra[1]["LMáx [dB]"] }}</td>
-        <td>{{ muestra[1]["LMín [dB]"] }}</td>
-      </tr>
+        {% if muestra[0]["Nombre"] in mediciones %}
+          <tr class="row">
+            <td>{{ muestra[0]["Nombre"] }}</td>
+            <td>{{ muestra[1]["Leq [dB]"] }}</td>
+            <td>{{ muestra[1]["LAFMáx [dB]"] }}</td>
+            <td>{{ muestra[1]["LMáx [dB]"] }}</td>
+            <td>{{ muestra[1]["LMín [dB]"] }}</td>
+          </tr>
+        {% endif %}
       {% endfor %}
     </table>
 

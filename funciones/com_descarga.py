@@ -1,5 +1,7 @@
 import serial
 import datetime
+import os
+from funciones.resource_path import resource_path
 
 def com_descarga(puerto):
 
@@ -27,7 +29,8 @@ def com_descarga(puerto):
     finally:
         ser.close()
         # Abre un archivo en modo escritura ('w')
-    ruta_completa = f'D:\Pablo\Boreas\Python\Programas\descarga_datos_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.txt'    
+    tests_path = resource_path('tests')
+    ruta_completa = os.path.join(tests_path, f'descarga_datos_{datetime.datetime.now().strftime("%Y%m%d%H%M%S")}.txt')   
 
     # El archivo se cierra automáticamente al salir del bloque "with"
     # Abre un archivo en modo escritura ('w') para redirigir la salida
