@@ -23,7 +23,7 @@ class Equipo(tk.Toplevel):
         input_frame.grid(column=0, row=0)
 
     def descargar_datos(self):
-        com_descarga(self.puertos[4])
+        com_descarga(self.puertos[2])
     
     def create_ui(self):
 

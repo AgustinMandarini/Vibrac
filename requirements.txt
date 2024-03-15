@@ -15,8 +15,11 @@ pefile==2023.2.7
 Pillow==10.0.0
 pyinstaller==5.13.2
 pyinstaller-hooks-contrib==2023.8
+PyMuPDF==1.23.26
+PyMuPDFb==1.23.22
 pyparsing==3.0.9
 PyPDF2==3.0.1
+pyserial==3.5
 python-dateutil==2.8.2
 pywin32-ctypes==0.2.2
 PyYAML==6.0.1

@@ -7,7 +7,7 @@ def com_descarga(puerto):
 
     ser = serial.Serial(
         port=puerto,
-        baudrate=9600,
+        baudrate=115200,
         bytesize=8,
         parity='N',
         stopbits=1,
@@ -20,8 +20,6 @@ def com_descarga(puerto):
         ser.write(connect.encode())
 
         response = ser.read(100)
-
-        print(type(response.decode('utf-8')))
 
         print("Respuesta del dispositivo: ", response.decode('utf-8'))
     except serial.SerialException as e:

@@ -156,7 +156,6 @@ class Reportes(tk.Toplevel):
             self.mostrar_popup("Debe seleccionar un instrumento")
         else:
             try:
-            
                 # Accede a las variables de los Entry
                 nro_informe = self.nro_informe.get()
                 titulo = self.titulo.get()
@@ -165,7 +164,6 @@ class Reportes(tk.Toplevel):
                 observaciones = self.observaciones.get("1.0", "end")
                 
                 # Llama a la funcion importada "generar_informe"
-                print(self.mediciones_seleccionadas)
                 generar_informe(
                     self.ruta_archivo, 
                     self.mediciones_seleccionadas,
@@ -208,35 +206,4 @@ class Reportes(tk.Toplevel):
         conn.commit()
         conn.close()
 
-    # Agrega los datos ingresados a la tabla informes
-    def agrergar_datos_db():
-        conn = sqlite3.connect(self.db_path)
-        c = conn.cursor()
-
-        c.execute("SELECT oid FROM empresas WHERE oid=" + self.selected_empresa.get())
-        empresa_oid = c.fetchone()
     
-        try:
-            c.execute("INSERT INTO informes VALUES (:nro_informe, :empleado, :fecha, :id_empresa, id_instrumento, archivo_descarga)", 
-                    {
-                        'nro_informe': nro_informe.get(), 
-                        'titulo': titulo.get(),
-                        'empleado': empleado.get(),
-                        'fecha': fecha.get(),
-                        'id_empresa': empresa_oid,
-                        # 'id_instrumento': id_instrumento.get(),
-                        'archivo_descarga': archivo_descarga.get()
-                    })
-        except Exception as e:
-            print(f"Error al crear registro en informes: {e}")
-
-        conn.commit()
-        conn.close()
-
-        # limpiar los datos ingresados
-        nro_informe.delete(0, tk.END)
-        empleado.delete(0, tk.END)
-        fecha.delete(0, tk.END)
-        id_empresa.delete(0, tk.END)
-        id_instrumento.delete(0, tk.END)
-        archivo_descarga.delete(0, tk.END)

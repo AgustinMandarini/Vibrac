@@ -1,13 +1,16 @@
+import os
 import tkinter as tk
 import ttkbootstrap as tb
 import time
 from PIL import Image, ImageTk
 from tkinter import ttk
+from componentes.Mediciones import Mediciones
 from componentes.Reportes import Reportes
 from componentes.Empresas import Empresas
 from componentes.Instrumentos import Instrumentos
 from componentes.Equipo import Equipo
 from funciones.resource_path import resource_path
+from funciones.eliminar_archivos_temporales import eliminar_archivos_temporales
 import io
 
 class Splash(tk.Toplevel):
@@ -122,8 +125,12 @@ class App(tk.Tk):
         if text == 'Equipo':
             window = Equipo(self)
             window.grab_set()
+        if text == 'Mediciones':
+            window = Mediciones(self)
+            window.grab_set()
 
 if __name__ == "__main__":
     app = App()
     app.resizable(False, False)
     app.mainloop()
+    eliminar_archivos_temporales()
