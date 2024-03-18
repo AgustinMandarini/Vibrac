@@ -69,5 +69,7 @@ REM Ejecutar Inno Setup Compiler
 REM Limpiar archivos temporales
 del config.iss
 
+echo [92mInstalador de rugit creado y guardado en el escritorio[0m
+
 REM Pausar para permitir ver los mensajes de error
 pause

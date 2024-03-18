@@ -87,8 +87,8 @@ class Reportes(tk.Toplevel):
 
         # Listbox para mostrar las mediciones
         ttk.Label(frame, text='Seleccione las mediciones:').grid(column=0, row=8, sticky=tk.W)
-        self.listbox = tk.Listbox(frame, height=6, selectmode=tk.EXTENDED)
-        self.listbox.grid(row=8, column=1, columnspan=2, pady=10, padx=10, ipadx=100)
+        self.listbox = tk.Listbox(frame, height=6, selectmode=tk.MULTIPLE)
+        self.listbox.grid(row=8, column=1, columnspan=1, pady=10, padx=10, ipadx=100)
         self.listbox.bind('<<ListboxSelect>>', self.items_selected)
 
          # link a scrollbar to a list

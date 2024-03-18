@@ -37,12 +37,12 @@ class Mediciones(tk.Toplevel):
 
         # Boton de seleccion de archivo
         boton_abrir_archivo = ttk.Button(frame, text='Seleccione archivo de descarga', command=self.abrir_archivo)
-        boton_abrir_archivo.grid(row=1, column=0, columnspan=1, pady=0, padx=0, ipadx=10)
+        boton_abrir_archivo.grid(row=0, column=0, columnspan=1, pady=0, padx=0, ipadx=10)
 
         # Listbox para mostrar las mediciones
-        ttk.Label(frame, text='Seleccione las mediciones:').grid(row=2, column=0, sticky=tk.W)
-        self.listbox = tk.Listbox(frame, height=6, selectmode=tk.EXTENDED)
-        self.listbox.grid(row=1, column=1, columnspan=2, pady=10, padx=10, ipadx=100)
+        ttk.Label(frame, text='Seleccione las mediciones:').grid(row=1, column=0, sticky=tk.W)
+        self.listbox = tk.Listbox(frame, height=6, selectmode=tk.MULTIPLE)
+        self.listbox.grid(row=1, column=1, columnspan=1, pady=10, padx=10, ipadx=100)
         self.listbox.bind('<<ListboxSelect>>', self.items_selected)
 
          # link a scrollbar to a list
