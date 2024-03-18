@@ -31,7 +31,7 @@ REM Crear archivo de configuración para Inno Setup
     echo AppUpdatesURL={#MyAppURL}
     echo DefaultDirName={userappdata}\{#MyAppName}
     echo DisableProgramGroupPage=yes
-    echo OutputDir=D:\Output
+    echo OutputDir=C:\Users\Papablo\Desktop
     echo OutputBaseFilename=RUGIT_WINDOWS_0.1_setup
     echo Compression=lzma
     echo SolidCompression=yes
@@ -64,7 +64,7 @@ REM Crear archivo de configuración para Inno Setup
 ) > config.iss
 
 REM Ejecutar Inno Setup Compiler
-"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /O"D:\Output" config.iss
+"C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /O"C:\Users\Papablo\Desktop" config.iss
 
 REM Limpiar archivos temporales
 del config.iss
