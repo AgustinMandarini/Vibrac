@@ -1,7 +1,5 @@
 import os
-import shutil
 import PyPDF2
-import time
 import subprocess
 from jinja2 import Environment, FileSystemLoader
 import pdfkit

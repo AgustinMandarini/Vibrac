@@ -1,5 +1,6 @@
 import os
 import PyPDF2
+import subprocess
 from jinja2 import Environment, FileSystemLoader
 import pdfkit
 from funciones.structure_data import structure_data
@@ -120,4 +121,14 @@ def generar_informe(ruta_archivo, mediciones, empresa, instrumento, nro_informe,
     with open(pdf_path, "wb") as final_pdf_file:
         pdf_writer.write(final_pdf_file)
 
-    # webbrowser.open(pdf_path)
+    # Abrir el PDF con el visor de PDF predeterminado del sistema
+    try:
+        process = subprocess.Popen(['start', pdf_path], shell=True)
+        process.wait()  # Espera a que el visor de PDF se cierre antes de continuar
+    except FileNotFoundError:
+        # Si no se encuentra el visor de PDF predeterminado, abrir el PDF con Chrome
+        try:
+            subprocess.Popen(['chrome', pdf_path], shell=True)
+        except FileNotFoundError:
+            # Si no se encuentra Chrome, abrir el PDF con el navegador predeterminado
+            subprocess.Popen(['start', pdf_path], shell=True)
