@@ -1,3 +1,7 @@
 virtual_env
 _pyache_/
 *.pyc
+dist
+build
+main.spec
+rugit.spec
