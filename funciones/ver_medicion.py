@@ -13,7 +13,10 @@ def ver_medicion(ruta_archivo, mediciones):
     # importa la funcion structure_data y retorna los dos grupos de datos
     # data contiene toda la informacion de cada una de las muestras
     # numSerie_fechaCalib contiene un array con el nro de serie y fecha de calibración
+    
     data, numSerie_fechaCalib = structure_data(ruta_archivo)
+    
+
 
      # Utiliza la funcion resource_path para traer el path tanto si la aplicacion corre en distribucion o en desarrollo
     template_path = resource_path('template')
@@ -23,26 +26,19 @@ def ver_medicion(ruta_archivo, mediciones):
 
     # Crea un nuevo entorno de jinja para el nuevo template
     template = env.get_template('paginas_restantes_template.html')
-
-    html_content = template.render(
-        data=data,
-        numSerie_fechaCalib=numSerie_fechaCalib,
-        mediciones=mediciones
-        )
     
     # Configuracion del path para wkhtmltopdf
     path_wkhtmltopdf = r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe'
+    
     config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
-
+    
     pdf_location = resource_path('temp')
     pdf_path = os.path.join(pdf_location, f'ver_medicion_temp.pdf')   
-    pdfkit.from_string(html_content, pdf_path, configuration=config)
-
+    
     ##### CREAR PREVISUALIZACION DE MEDICIONES #####
 
     # Crear un objeto PDF para el archivo final
     pdf_writer = PyPDF2.PdfWriter()
-
     # Itera sobre data, que es un array donde cada uno de sus elementos son los datos correspondientes a cada medicion
     for i, muestra in enumerate(data):
 
