@@ -13,6 +13,9 @@ def structure_data(ruta_archivo):
         datos = file.read()
     # newDato es un array con el string original del archivo txt, donde cada linea del archivo es un elemento del array
     newDato = datos.split("\n")
+    
+    # Elimina las lineas vacías
+    newDato = [linea for linea in newDato if linea.strip()]
 
     # Se elimina el primer y los dos ultimos elemento del array, ya que son caracteres que no sirven (S2 y W)
     newDato.pop(0)
@@ -21,6 +24,10 @@ def structure_data(ruta_archivo):
     # En caso de que el txt venga con un string de salto de linea ('\n') ademas del salto de linea propieamente dicho, la siguiente
     # linea se encarga de eliminar el caracter sobrante 
     newDato = [linea.replace("\\n", "") for linea in newDato]
+
+    
+
+    print(newDato)
     
     # Se crean diccionarios y arrays para cada parte del informe (Encabezado, resultadoss, grafico1, grafico2, numSerie_fechaCalib)
     data = []
