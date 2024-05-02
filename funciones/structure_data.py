@@ -25,10 +25,6 @@ def structure_data(ruta_archivo):
     # linea se encarga de eliminar el caracter sobrante 
     newDato = [linea.replace("\\n", "") for linea in newDato]
 
-    
-
-    print(newDato)
-    
     # Se crean diccionarios y arrays para cada parte del informe (Encabezado, resultadoss, grafico1, grafico2, numSerie_fechaCalib)
     data = []
     encabezado = {"Fecha": "","Hora":"","Nombre":"","Cantidad de Muestras":"","Intervalo de muestra(s)":"", "Ponderacion":"","Integracion":"", "Analisis":""}
