@@ -61,11 +61,11 @@ def generar_informe(ruta_archivo, mediciones, empresa, instrumento, nro_informe,
 
         if muestra[0]["Nombre"] in mediciones:
             # Datos para el grafico 1
-            intervalo = muestra[0]["Intervalo de muestra(s)"] / 60
+            intervalo = muestra[0]["Intervalo de muestra(s)"]
             cantidad_muestras = muestra[0]["Cantidad de Muestras"]
 
             # Obtener valores para el eje x
-            x1 = np.arange(0.0, cantidad_muestras, intervalo) # Crea tambien intervalos de tiempo
+            x1 = np.arange(0.0, cantidad_muestras) # Crea tambien intervalos de tiempo
             x2 = ["63", "80", "100", "125", "160", "200", "250", "315", "400", "500", "630", "800", "1 k", "1,25 k", "1,6 k", "2 k", "2,5 k", "3,15 k", "4 k", "5 k", "6,3 k", "8 k", "10 k", "12,5 k", "16 k", "20 k"]
             
             # Obtener valores para eje y
@@ -79,7 +79,7 @@ def generar_informe(ruta_archivo, mediciones, empresa, instrumento, nro_informe,
             plt.subplots_adjust(left=0.05, right=0.99, hspace=0.6)
 
             # Crea el ploy con los valores x, y entregados
-            ax1.plot(x1, y1)
+            ax1.plot(x1*intervalo, y1)
             # ax2.bar(x2, y2, width=1, edgecolor="white", linewidth=0.7)
 
             ax1.set(xlabel='Tiempo (min)', ylabel='Ruido [dB]',
